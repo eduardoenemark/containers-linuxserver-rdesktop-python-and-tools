@@ -119,7 +119,7 @@ For accelerated apps or games, render devices can be mounted into the container 
 
 - **Base Image**: linuxserver/rdesktop:ubuntu-xfce-version-aaa0dc4e
 - **Maintainer**: Eduardo Vieira (Telegram/X: @eduardoenemark)
-- **Source Repository**: https://github.com/eduardoenemark/containers/tree/main/linuxserver-rdesktop-python-and-tools/xfce
+- **Source Repository**: https://github.com/eduardoenemark/containers-linuxserver-rdesktop-python-and-tools
 - **License**: GPL-3.0-only
 
 ---

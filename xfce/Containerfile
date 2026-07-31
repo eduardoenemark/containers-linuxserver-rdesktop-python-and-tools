@@ -7,7 +7,7 @@ FROM docker.io/linuxserver/rdesktop:ubuntu-xfce-version-aaa0dc4e
 # 1. Environment variables – configure at runtime
 # ---------------------------------------------------------------
 # repository url
-ENV REPO_URL=https://github.com/eduardoenemark/containers/tree/main/linuxserver-rdesktop-python-and-tools/xfce
+ENV REPO_URL=https://github.com/eduardoenemark/containers-linuxserver-rdesktop-python-and-tools
 
 # build date/time
 ARG CREATED_DATETIME
