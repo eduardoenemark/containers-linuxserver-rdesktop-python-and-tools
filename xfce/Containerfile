@@ -1,0 +1,54 @@
+# ----------------------------------------------------------------------
+# Base image – linuxserver/rdesktop:ubuntu-xfce-version-aaa0dc4e
+# ----------------------------------------------------------------------
+FROM docker.io/linuxserver/rdesktop:ubuntu-xfce-version-aaa0dc4e
+
+# ---------------------------------------------------------------
+# 1. Environment variables – configure at runtime
+# ---------------------------------------------------------------
+# repository url
+ENV REPO_URL=https://github.com/eduardoenemark/containers/tree/main/linuxserver-rdesktop-python-and-tools/xfce
+
+# build date/time
+ARG CREATED_DATETIME
+ENV CREATED_DATETIME=${CREATED_DATETIME}
+
+# ------------------------------------------------------------------
+# 2. Labels – OCI image metadata + extra documentation labels
+# ------------------------------------------------------------------
+LABEL org.opencontainers.image.ref.name="linuxserver-rdesktop-xfce-python-and-tools" \
+      org.opencontainers.image.version="1.0" \
+      org.opencontainers.image.authors="@eduardoenemark" \
+      org.opencontainers.image.source="${REPO_URL}" \
+      org.opencontainers.image.title="LinuxServer Rdesktop with Python and VS Code" \
+      org.opencontainers.image.description="A container based on linuxserver/rdesktop with Ubuntu/Xfce, Python, VS Code and others tools." \
+      org.opencontainers.image.created="${CREATED_DATETIME}" \
+      org.opencontainers.image.licenses="GPL-3.0-only" \
+      org.opencontainers.image.purpose="Desktop container with Python development tools" \
+      org.opencontainers.image.vendor="t.me/eduardoenemark" \
+      org.opencontainers.image.url="${REPO_URL}" \
+      org.opencontainers.image.documentation="${REPO_URL}" \
+      maintainer="Eduardo Vieira <eduardoenemark@gmail.com>"
+
+# ------------------------------------------------------------------
+# 3. Install required packages
+# ------------------------------------------------------------------
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip python3-venv wget gpg file && \
+    apt-get install -y curl nano vim gedit caja net-tools gcc g++ && \
+    apt-get install -y gzip bzip2 xz-utils zip unzip 7zip && \
+    apt-get install -y openssh-client ssh-tools sshfs && \
+    apt-get install -y okular less && \
+    # Install VS Code from Microsoft's repository
+    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg && \
+    echo "deb [arch=amd64] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list && \
+    apt-get update && \
+    apt-get install -y code && \
+    # Create symlink to use VS Code with --no-sandbox flag
+    ln -sf /usr/bin/code /usr/bin/code-original && \
+    echo '#!/bin/bash\nexec /usr/bin/code-original --no-sandbox "$@"' > /usr/bin/code && \
+    chmod +x /usr/bin/code && \
+    # Clean up
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /tmp/*
